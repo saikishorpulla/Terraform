@@ -4,27 +4,27 @@ provider "aws" {
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = ">= 19.0.0"
+  # pin a stable module version (choose one supported by your providers)
+  version = ">= 18.0, < 22.0"
 
   cluster_name    = var.cluster_name
-  cluster_version = var.kubernetes_version
-  subnets         = null  # let module create a VPC when create_vpc = true
+  cluster_version = "1.28"          # change if you prefer another supported k8s version
 
-  # Let module create VPC automatically
+  # Let module create a VPC for you (simple)
   create_vpc = true
 
-  # node group (managed node group)
+  # managed node group(s)
   node_groups = {
     default = {
       desired_capacity = var.node_desired_capacity
       min_capacity     = 1
-      max_capacity     = 3
-      instance_type    = var.node_instance_type
-      # optionally attach additional tags, iam policies etc.
+      max_capacity     = 2
+      instance_types   = [var.node_instance_type]
     }
   }
 
   tags = {
+    Terraform   = "true"
     Environment = "dev"
     Project     = "jenkins-eks"
   }
