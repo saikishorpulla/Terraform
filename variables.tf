@@ -8,23 +8,12 @@ variable "cluster_name" {
   default = "demo-eks-cluster"
 }
 
-variable "kubernetes_version" {
-  type    = string
-  default = "1.28"
-}
-
 variable "node_instance_type" {
   type    = string
-  default = "t2.micro"
+  default = "t3.medium"
 }
 
 variable "node_desired_capacity" {
   type    = number
-  default = 2
-}
-
-# optional: state bucket name when using S3 backend
-variable "tfstate_bucket" {
-  type    = string
-  default = ""
+  default = 1
 }
