@@ -20,8 +20,10 @@ pipeline {
                     passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
 
                     sh """
-                        terraform init
-                        terraform apply -auto-approve
+                        rm -rf .terraform .terraform.lock.hcl
+                        terraform init -upgrade
+                        terraform plan -out=tfplan
+                        terraform apply -auto-approve tfplan
                     """
                 }
             }
@@ -38,7 +40,7 @@ pipeline {
         stage('Deploy NGINX') {
             steps {
                 sh """
-                    kubectl apply -f k8s/nginx.yaml
+                    kubectl apply -f deploymrnt-ngnix.yaml
                     kubectl get pods -l app=nginx
                 """
             }
